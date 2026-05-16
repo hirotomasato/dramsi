@@ -12,6 +12,10 @@ Frontend modern mobile-first dengan pengalaman immersive ala DramaBox/TikTok, di
 [![HLS.js](https://img.shields.io/badge/HLS.js-1.5-EB5424)](https://github.com/video-dev/hls.js)
 [![License: MIT](https://img.shields.io/badge/License-MIT-22c55e)](#license)
 
+<a href="static/img/dramsi.png">
+  <img src="https://img.shields.io/badge/%F0%9F%96%BC%EF%B8%8F%20Preview%20Tampilan-Klik%20di%20sini-7c5cff?style=for-the-badge" alt="Preview tampilan DramSi" />
+</a>
+
 </div>
 
 ---
@@ -92,11 +96,12 @@ Saat ini mendukung tiga platform:
 
 ## Demo & Tangkapan Layar
 
-> Tambahkan screenshot/GIF kamu di folder `docs/` lalu update gambar di bawah.
-
-| Beranda | Watch · Mobile Immersive | Bottom-sheet Episode |
-|---|---|---|
-| ![home](docs/home.png) | ![watch](docs/watch.png) | ![episodes](docs/episodes.png) |
+<div align="center">
+  <a href="static/img/dramsi.png">
+    <img src="static/img/dramsi.png" alt="Tangkapan layar DramSi" width="900" />
+  </a>
+  <p><sub>Klik gambar untuk melihat ukuran penuh.</sub></p>
+</div>
 
 ---
 
