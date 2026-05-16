@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Saya · DramSi{% endblock %}
+
+{% block content %}
+<div class="pt-2 pb-1">
+  <h1 class="text-2xl font-extrabold tracking-tight font-display" data-i18n="library.title">Riwayat &amp; Favorit</h1>
+  <p class="mt-1 text-sm text-white/55" data-i18n="library.sub">Drama yang baru kamu tonton akan muncul di sini.</p>
+</div>
+
+<div class="mt-4 flex flex-wrap gap-2">
+  <button data-tab="recent"
+          class="lib-chip is-active rounded-full px-4 py-1.5 text-xs font-semibold transition border bg-gradient-to-br from-primary to-secondary border-transparent text-white">
+    <span data-i18n="library.recent">Baru ditonton</span>
+  </button>
+  <button data-tab="favorite"
+          class="lib-chip rounded-full px-4 py-1.5 text-xs font-semibold transition border border-line bg-ink-700 text-white/65 hover:text-white">
+    <span data-i18n="library.favorite">Favorit</span>
+  </button>
+  <button id="clearLibBtn" class="ml-auto inline-flex items-center gap-1.5 rounded-full border border-line bg-ink-700 px-3 py-1.5 text-[11.5px] font-semibold text-white/55 hover:text-danger transition">
+    <i data-lucide="trash-2" class="h-3.5 w-3.5"></i>
+    <span>Bersihkan</span>
+  </button>
+</div>
+
+<section class="mt-5">
+  <div id="libraryGrid" class="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 md:gap-4 lg:grid-cols-6"></div>
+  <div id="libraryEmpty" hidden class="mt-12 flex flex-col items-center justify-center text-center">
+    <div class="grid h-20 w-20 place-items-center rounded-3xl bg-ink-700 text-white/35 mb-4">
+      <i data-lucide="film" class="h-9 w-9"></i>
+    </div>
+    <p class="font-display text-base font-bold text-white" data-i18n="library.empty_title">Belum ada riwayat.</p>
+    <p class="mt-1 text-sm text-white/55" data-i18n="library.empty_sub">Mulai tonton drama pertamamu di Beranda.</p>
+    <a href="/" class="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-br from-primary to-secondary px-5 py-2.5 text-sm font-semibold text-white shadow-glow">
+      <i data-lucide="home" class="h-4 w-4"></i>Buka Beranda
+    </a>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/library.js') }}"></script>
+{% endblock %}

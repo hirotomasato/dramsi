@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Cari · DramSi{% endblock %}
+
+{% block content %}
+<div class="sticky top-14 z-30 -mx-4 -mt-3 flex gap-2 bg-ink-900/85 px-4 py-3 backdrop-blur-xl">
+  <form id="searchForm" autocomplete="off"
+        class="group flex flex-1 items-center gap-2 rounded-full border border-line bg-ink-700 pl-4 pr-3 transition focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
+    <i data-lucide="search" class="h-4 w-4 text-white/45"></i>
+    <input id="searchInput" type="search" name="q" placeholder="Cari drama, judul, kata kunci…" autofocus
+           class="flex-1 bg-transparent py-2.5 text-sm text-white placeholder:text-white/40 outline-none" />
+    <button type="button" id="clearSearchBtn" hidden aria-label="Bersihkan"
+            class="grid h-7 w-7 place-items-center rounded-full text-white/55 hover:text-white">
+      <i data-lucide="x" class="h-3.5 w-3.5"></i>
+    </button>
+  </form>
+  <button id="searchPlatformBtn" aria-label="Pilih platform"
+          class="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-line bg-ink-700 text-white/85 transition hover:border-primary/60 active:scale-90">
+    <i data-lucide="sliders-horizontal" class="h-4 w-4"></i>
+  </button>
+</div>
+
+<p id="searchHint" class="mt-1 text-[13px] text-white/50" data-i18n="search.hint">
+  Ketik judul, atau coba: CEO, balas dendam, romansa.
+</p>
+
+<div id="searchGrid" class="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 md:gap-4 lg:grid-cols-6"></div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+{% endblock %}

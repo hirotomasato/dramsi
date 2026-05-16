@@ -1,0 +1,17 @@
+<!-- Reusable bottom-sheet for selectors -->
+<div id="sheetBackdrop" class="hidden fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm"></div>
+
+<aside id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"
+       class="sheet-translate fixed inset-x-0 bottom-0 z-[81] flex max-h-[80vh] flex-col overflow-hidden rounded-t-3xl border-t border-line bg-ink-800 pb-[env(safe-area-inset-bottom)]">
+  <div class="mx-auto mt-2.5 mb-1 h-1 w-10 rounded-full bg-ink-500"></div>
+  <div class="flex items-center justify-between px-5 py-3">
+    <h3 id="sheetTitle" class="text-[17px] font-extrabold font-display">Pilih</h3>
+    <button id="sheetCloseBtn" aria-label="Tutup"
+            class="grid h-9 w-9 place-items-center rounded-full bg-ink-700 text-white/85 transition active:scale-90">
+      <i data-lucide="x" class="h-4 w-4"></i>
+    </button>
+  </div>
+  <div class="overflow-y-auto px-5 pb-6">
+    <div id="sheetList" class="flex flex-col gap-1.5"></div>
+  </div>
+</aside>

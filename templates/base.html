@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id" class="bg-black">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a14" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="description" content="DramSi · streaming drama pendek lintas platform dengan tampilan modern." />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="/static/img/favicon.svg" />
+  <link rel="alternate icon" type="image/png" sizes="192x192" href="/static/img/icon-192.svg" />
+  <link rel="apple-touch-icon" href="/static/img/icon-192.svg" />
+  <link rel="mask-icon" href="/static/img/favicon.svg" color="#7c5cff" />
+  <title>{% block title %}DramSi{% endblock %}</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: {
+              900: '#05060d',
+              850: '#0a0b16',
+              800: '#0e1020',
+              700: '#15172a',
+              600: '#1c1f37',
+              500: '#242848',
+              400: '#2f3354',
+            },
+            line: '#232744',
+            primary: {
+              DEFAULT: '#7c5cff',
+              soft: '#a285ff',
+            },
+            secondary: '#ff5da2',
+            accent: '#44e0c4',
+            gold: '#ffce4f',
+            danger: '#ff5577',
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+          },
+          boxShadow: {
+            glow: '0 8px 24px rgba(124, 92, 255, 0.45)',
+            'glow-lg': '0 20px 50px rgba(124, 92, 255, 0.5)',
+            card: '0 4px 14px rgba(0, 0, 0, 0.35)',
+            elev: '0 10px 30px rgba(0, 0, 0, 0.45)',
+          },
+          keyframes: {
+            'shimmer': { '0%': { backgroundPosition: '200% 0' }, '100%': { backgroundPosition: '-200% 0' } },
+            'fadeIn': { '0%': { opacity: 0, transform: 'translateY(8px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
+            'slideUp': { '0%': { transform: 'translateY(100%)' }, '100%': { transform: 'translateY(0)' } },
+            'pop': { '0%': { transform: 'scale(.9)', opacity: 0 }, '100%': { transform: 'scale(1)', opacity: 1 } },
+            'spin-slow': { to: { transform: 'rotate(360deg)' } },
+          },
+          animation: {
+            shimmer: 'shimmer 1.4s infinite linear',
+            'fade-in': 'fadeIn 0.35s ease-out',
+            'slide-up': 'slideUp 0.32s cubic-bezier(.32,.72,.4,1)',
+            pop: 'pop 0.25s ease-out',
+            'spin-slow': 'spin-slow 1s linear infinite',
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js" defer></script>
+</head>
+<body class="font-sans text-[15px] text-white antialiased min-h-screen pb-[calc(64px+env(safe-area-inset-bottom))] md:pb-0
+  bg-[radial-gradient(ellipse_90%_50%_at_50%_-10%,rgba(124,92,255,.22),transparent_55%),radial-gradient(ellipse_70%_40%_at_100%_5%,rgba(255,93,162,.14),transparent_55%)] bg-ink-900">
+
+  {% include '_topbar.html' %}
+
+  <main class="mx-auto w-full max-w-[1280px] px-4 pt-3 pb-8">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% include '_bottom_nav.html' %}
+  {% include '_sheets.html' %}
+
+  <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/state.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/ui.js') }}"></script>
+  {% block scripts %}{% endblock %}
+
+  <script>
+    // Re-render Lucide icons whenever JS appends new content
+    window.refreshIcons = () => window.lucide?.createIcons?.();
+    window.addEventListener('DOMContentLoaded', () => window.refreshIcons?.());
+  </script>
+</body>
+</html>

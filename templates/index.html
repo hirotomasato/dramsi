@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}DramSi · Streaming drama pendek lintas platform{% endblock %}
+
+{% block content %}
+<nav id="platformTabs" aria-label="Pilih platform" class="no-scrollbar -mx-4 mb-1 flex gap-1 overflow-x-auto px-4 pt-2"></nav>
+
+<section class="relative mt-3 overflow-hidden rounded-3xl border border-line/40" aria-label="Sorotan">
+  <div id="heroTrack" class="flex transition-transform duration-[550ms] ease-[cubic-bezier(.22,.9,.32,1)]"></div>
+  <div id="heroDots" class="absolute inset-x-0 bottom-2.5 z-10 flex justify-center gap-1.5"></div>
+</section>
+
+<!-- Section: Trending -->
+<section class="mt-7" id="trendingSection">
+  <div class="mb-3 flex items-end justify-between gap-3">
+    <div>
+      <h2 class="text-[19px] font-extrabold tracking-tight font-display" data-i18n="home.trending">Sedang Trending</h2>
+      <p class="mt-0.5 text-xs text-white/55" data-i18n="home.trending_sub">Konten paling banyak ditonton sekarang.</p>
+    </div>
+    <a href="/discover" class="inline-flex items-center gap-1 text-xs font-semibold text-white/60 hover:text-primary-soft transition" data-i18n="home.see_all">Lihat semua →</a>
+  </div>
+  <div id="trendingRail" class="no-scrollbar -mx-4 grid grid-flow-col auto-cols-[132px] sm:auto-cols-[160px] gap-3 sm:gap-3.5 overflow-x-auto px-4 py-1 snap-x snap-mandatory"></div>
+</section>
+
+<!-- Section: New Release -->
+<section class="mt-8" id="newReleaseSection">
+  <div class="mb-3">
+    <h2 class="text-[19px] font-extrabold tracking-tight font-display" data-i18n="home.new">Rilis Baru</h2>
+    <p class="mt-0.5 text-xs text-white/55" data-i18n="home.new_sub">Drama segar yang baru ditambahkan.</p>
+  </div>
+  <div id="newReleaseRail" class="no-scrollbar -mx-4 grid grid-flow-col auto-cols-[132px] sm:auto-cols-[160px] gap-3 sm:gap-3.5 overflow-x-auto px-4 py-1 snap-x snap-mandatory"></div>
+</section>
+
+<!-- Section: For You Grid -->
+<section class="mt-8" id="forYouSection">
+  <div class="mb-3">
+    <h2 class="text-[19px] font-extrabold tracking-tight font-display" data-i18n="home.for_you">Untuk Kamu</h2>
+    <p class="mt-0.5 text-xs text-white/55" data-i18n="home.for_you_sub">Pilihan terkurasi dari semua platform.</p>
+  </div>
+  <div id="forYouGrid" class="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 md:gap-4 lg:grid-cols-6"></div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}

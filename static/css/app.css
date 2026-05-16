@@ -1,0 +1,188 @@
+/* ===== DramSi · Tailwind extension layer ===========================
+   Hanya hal yang tidak praktis di Tailwind atau perlu pseudo-element.
+   ================================================================= */
+
+* { -webkit-tap-highlight-color: transparent; }
+
+html, body { overscroll-behavior-y: contain; }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #1c1f37; border-radius: 999px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Skeleton shimmer — Tailwind's bg-gradient + animate-shimmer */
+.skeleton {
+  background: linear-gradient(90deg, #15172a 0%, #232744 50%, #15172a 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Line clamp helpers (use Tailwind's line-clamp-* if @tailwindcss/line-clamp is enabled,
+   ini fallback yang sudah build-in di tailwind v3.3+) */
+
+/* Vertical aspect for short drama */
+.aspect-vertical {
+  aspect-ratio: 9 / 16;
+}
+
+/* Custom video styling */
+video {
+  background: #000;
+}
+video::-webkit-media-controls-panel {
+  background-image: linear-gradient(transparent, rgba(0, 0, 0, .5));
+}
+
+/* Hero gradient overlay */
+.hero-gradient {
+  background: linear-gradient(180deg, transparent 0%, rgba(5, 6, 13, 0.2) 45%, rgba(5, 6, 13, 0.95) 100%);
+}
+
+/* Bottom-sheet slide animation */
+.sheet-translate {
+  transform: translateY(100%);
+  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0.4, 1);
+}
+.sheet-translate.is-open { transform: translateY(0); }
+
+/* Episode rank number stroke */
+.rank-text {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 900;
+  font-size: 36px;
+  line-height: 1;
+  background: linear-gradient(180deg, #fff, #ff5da2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(124, 92, 255, 0.55);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.55));
+}
+
+/* Player overlay countdown ring */
+.countdown-ring {
+  --p: 0;
+  background: conic-gradient(#7c5cff calc(var(--p) * 1%), rgba(255, 255, 255, 0.18) 0);
+}
+
+/* Active tab underline (used in platform-tabs) */
+.tab-active::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #7c5cff, #ff5da2);
+}
+
+/* Lucide icons default size */
+[data-lucide] { width: 1em; height: 1em; }
+
+
+/* =====================================================================
+   Subtitle styling (::cue)
+   Hanya properti berikut yang aman di ::cue: color, background,
+   font, opacity, outline, text-shadow, white-space.
+   Posisi cue di-handle browser (default: bottom-centered).
+   ===================================================================== */
+video::cue {
+  color: #fff;
+  background: transparent;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.35;
+  /* Double-stack shadow → terbaca jelas di background terang/gelap */
+  text-shadow:
+    0 0 4px rgba(0, 0, 0, 0.95),
+    0 1px 2px rgba(0, 0, 0, 0.95),
+    0 0 14px rgba(0, 0, 0, 0.55);
+  white-space: pre-line;
+}
+
+/* Kalau player vertical (drama pendek) ukurannya ngepas mobile */
+.player video::cue { font-size: 16px; }
+
+/* Layar besar */
+@media (min-width: 1024px) {
+  video::cue { font-size: 20px; }
+}
+
+/* Hide aksen kotak background bawaan (Safari) */
+video::-webkit-media-text-track-display {
+  background: transparent !important;
+}
+video::-webkit-media-text-track-container {
+  /* Geser sedikit ke atas dari edge bawah supaya gak kepotong control bar */
+  padding-bottom: 10px;
+}
+
+
+/* =====================================================================
+   Watch · immersive full-screen mobile experience (DramaBox-like)
+   - Pada layar < md, player mengambil seluruh viewport (fixed)
+   - Topbar & bottom nav disembunyikan, meta block disembunyikan
+   - Right rail floating: prev / episodes / next
+   ===================================================================== */
+@media (max-width: 767.98px) {
+  /* Sembunyikan chrome aplikasi saat berada di halaman /watch */
+  body.is-watch #topBar,
+  body.is-watch #bottomNav { display: none !important; }
+
+  /* Hilangkan padding bawah default body (yang biasanya untuk bottom nav) */
+  body.is-watch { padding-bottom: 0 !important; }
+
+  body.is-watch main {
+    padding: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
+
+  body.is-watch .watch-root { margin: 0 !important; gap: 0 !important; }
+
+  /* Meta block (judul + tombol prev/next versi tile + sinopsis) tidak perlu di mobile */
+  body.is-watch .meta-block { display: none !important; }
+
+  /* Player wrap mengambil seluruh viewport */
+  body.is-watch .player-wrap {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    border: 0 !important;
+    border-radius: 0 !important;
+    z-index: 30;
+  }
+
+  /* Player inner: penuhi parent, abaikan aspect-ratio bawaan */
+  body.is-watch .player-inner {
+    aspect-ratio: auto !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: 100%;
+  }
+
+  /* Object-fit kontrol: untuk drama vertikal "cover", untuk landscape "contain" */
+  body.is-watch.is-vertical #video { object-fit: cover; }
+  body.is-watch.is-horizontal #video { object-fit: contain; }
+}
+
+/* Swipe hint fade out helper */
+#swipeHint { transition: opacity .4s ease; }
+#swipeHint.hidden-fade { opacity: 0; pointer-events: none; }
+
+
+/* Auto-hide mobile overlay state */
+#mobileOverlay.is-hidden { opacity: 0; }
+#mobileOverlay.is-hidden * { pointer-events: none !important; }

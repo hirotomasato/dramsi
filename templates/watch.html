@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block title %}Tonton · DramSi{% endblock %}
+
+{% block content %}
+<section id="watchRoot" class="watch-root -mx-4 grid gap-0 md:mx-0 md:mt-2 md:grid-cols-[1fr_360px] md:gap-6">
+  <!-- ── Player + Meta ──────────────────────────────────────── -->
+  <div class="player-col">
+    <!-- Player wrap: di mobile mengisi seluruh viewport, di desktop tetap card -->
+    <div id="playerWrap" class="player-wrap relative w-full overflow-hidden bg-black md:rounded-2xl md:border md:border-line">
+      <div id="playerInner" class="player-inner relative mx-auto aspect-video w-full bg-black">
+        <video id="video" controls playsinline class="absolute inset-0 h-full w-full"></video>
+
+        <!-- Loading / error overlay -->
+        <div id="playerOverlay" class="absolute inset-0 z-10 grid place-items-center gap-3 bg-black/55 text-white/85">
+          <div class="h-10 w-10 rounded-full border-[3px] border-white/15 border-t-primary animate-spin-slow"></div>
+          <p id="playerOverlayText" class="text-sm" data-i18n="player.loading">Memuat video…</p>
+        </div>
+
+        <!-- ── Mobile immersive overlay UI (top + side rail) ── -->
+        <div id="mobileOverlay" class="md:hidden pointer-events-none absolute inset-0 z-20 transition-opacity duration-300">
+          <!-- Top bar: back + meta + favorite -->
+          <div class="pointer-events-auto absolute inset-x-0 top-0 flex items-start gap-2 px-3 pt-[calc(env(safe-area-inset-top)+10px)] pb-3 bg-gradient-to-b from-black/70 via-black/30 to-transparent">
+            <a href="/" aria-label="Kembali" class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-black/45 text-white backdrop-blur active:scale-90 transition">
+              <i data-lucide="chevron-left" class="h-5 w-5"></i>
+            </a>
+            <div class="min-w-0 flex-1">
+              <h1 id="dramaTitleMobile" class="truncate text-[15px] font-extrabold leading-tight font-display text-white drop-shadow">—</h1>
+              <p class="mt-0.5 flex items-center gap-1.5 text-[11px] text-white/75 drop-shadow">
+                <span id="platformLabelMobile" class="inline-flex items-center gap-1">
+                  <i data-lucide="layers" class="h-3 w-3"></i><span>—</span>
+                </span>
+                <span class="h-1 w-1 rounded-full bg-white/45"></span>
+                <span id="epLabelMobile">—</span>
+              </p>
+            </div>
+            <button id="favoriteBtnMobile" aria-label="Favoritkan"
+                    class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-black/45 text-white backdrop-blur active:scale-90 transition">
+              <i data-lucide="heart" class="h-4 w-4"></i>
+            </button>
+          </div>
+
+          <!-- Right rail: prev / episodes / next -->
+          <div class="pointer-events-auto absolute right-3 top-1/2 -translate-y-1/2 flex flex-col items-center gap-3">
+            <button id="prevEpBtnMobile" aria-label="Episode sebelumnya"
+                    class="grid h-11 w-11 place-items-center rounded-full bg-black/55 text-white backdrop-blur border border-white/10 active:scale-90 transition disabled:opacity-40">
+              <i data-lucide="chevron-up" class="h-5 w-5"></i>
+            </button>
+            <button id="openEpSheetBtn" aria-label="Daftar episode"
+                    class="relative grid h-14 w-14 place-items-center rounded-full bg-gradient-to-br from-primary to-secondary text-white shadow-glow active:scale-90 transition">
+              <i data-lucide="list-video" class="h-6 w-6"></i>
+              <span id="epBadgeMobile" class="absolute -top-1 -right-1 min-w-[20px] rounded-full bg-black/85 px-1.5 py-0.5 text-[10px] font-extrabold text-white border border-white/15">—</span>
+            </button>
+            <button id="nextEpBtnMobile" aria-label="Episode berikutnya"
+                    class="grid h-11 w-11 place-items-center rounded-full bg-black/55 text-white backdrop-blur border border-white/10 active:scale-90 transition disabled:opacity-40">
+              <i data-lucide="chevron-down" class="h-5 w-5"></i>
+            </button>
+          </div>
+
+          <!-- Swipe hint, hilang setelah pertama interaksi -->
+          <div id="swipeHint" class="pointer-events-none absolute inset-x-0 bottom-24 flex justify-center">
+            <span class="rounded-full bg-black/55 px-3 py-1.5 text-[11px] font-semibold text-white/85 backdrop-blur border border-white/10">
+              ↑ Geser untuk ganti episode ↓
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meta + actions (disembunyikan di mobile saat immersive) -->
+    <div class="meta-block px-4 pt-5 pb-7 md:px-0">
+      <div class="flex items-start gap-3">
+        <div class="min-w-0 flex-1">
+          <h1 id="dramaTitle" class="text-xl font-extrabold leading-tight tracking-tight font-display line-clamp-2">—</h1>
+          <div class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-white/55">
+            <span id="platformLabel" class="inline-flex items-center gap-1">
+              <i data-lucide="layers" class="h-3 w-3"></i><span>—</span>
+            </span>
+            <span class="h-1 w-1 rounded-full bg-white/30"></span>
+            <span id="epLabel">—</span>
+            <span class="h-1 w-1 rounded-full bg-white/30"></span>
+            <span id="totalLabel">—</span>
+          </div>
+        </div>
+        <button id="favoriteBtn" aria-label="Favoritkan"
+                class="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-line bg-ink-700 text-white/85 transition hover:border-primary/60 active:scale-90">
+          <i data-lucide="heart" class="h-4 w-4"></i>
+        </button>
+      </div>
+
+      <!-- Action row -->
+      <div class="mt-4 flex gap-2.5">
+        <button id="prevEpBtn" class="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-line bg-ink-700 px-4 py-3 text-sm font-semibold text-white/85 hover:border-primary/60 disabled:opacity-50 disabled:cursor-not-allowed transition active:scale-95">
+          <i data-lucide="skip-back" class="h-4 w-4"></i>
+          <span data-i18n="player.prev">Sebelumnya</span>
+        </button>
+        <button id="nextEpBtn" class="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-gradient-to-br from-primary to-secondary px-4 py-3 text-sm font-bold text-white shadow-glow disabled:opacity-50 disabled:cursor-not-allowed transition active:scale-95">
+          <span data-i18n="player.next">Berikutnya</span>
+          <i data-lucide="skip-forward" class="h-4 w-4"></i>
+        </button>
+      </div>
+
+      <!-- Quality row -->
+      <div id="qualityRow" class="mt-4 flex flex-wrap gap-2"></div>
+
+      <!-- Synopsis -->
+      <p id="dramaSynopsis" class="mt-4 text-[13.5px] leading-[1.65] text-white/65 line-clamp-3"></p>
+      <button id="toggleSynopsisBtn" hidden class="mt-1 text-xs font-semibold text-primary-soft hover:text-primary transition">Selengkapnya</button>
+    </div>
+  </div>
+
+  <!-- ── Desktop sidebar with episodes ─────────────────────── -->
+  <aside class="hidden md:block sticky top-[72px] self-start max-h-[calc(100vh-88px)] overflow-y-auto rounded-2xl border border-line bg-ink-800/60 p-5 backdrop-blur">
+    <div class="mb-4 flex items-baseline justify-between">
+      <h3 class="text-[17px] font-extrabold font-display" data-i18n="player.episodes">Episode</h3>
+      <span id="epCount" class="text-xs text-white/55">—</span>
+    </div>
+    <div id="epList" class="grid gap-2 grid-cols-[repeat(auto-fill,minmax(54px,1fr))]"></div>
+  </aside>
+</section>
+
+<!-- ── Mobile-only Episodes bottom-sheet ────────────────────── -->
+<div id="epSheetBackdrop" class="md:hidden hidden fixed inset-0 z-[80] bg-black/60 backdrop-blur-sm"></div>
+<aside id="epSheet" role="dialog" aria-modal="true" aria-labelledby="epSheetTitle"
+       class="md:hidden sheet-translate fixed inset-x-0 bottom-0 z-[81] flex max-h-[78vh] flex-col overflow-hidden rounded-t-3xl border-t border-line bg-ink-800 pb-[env(safe-area-inset-bottom)]">
+  <div class="mx-auto mt-2.5 mb-1 h-1 w-10 rounded-full bg-ink-500"></div>
+  <div class="flex items-center justify-between px-5 py-3">
+    <div>
+      <h3 id="epSheetTitle" class="text-[17px] font-extrabold font-display" data-i18n="player.episodes">Episode</h3>
+      <p id="epSheetSub" class="text-[11.5px] text-white/55">—</p>
+    </div>
+    <button id="epSheetCloseBtn" aria-label="Tutup"
+            class="grid h-9 w-9 place-items-center rounded-full bg-ink-700 text-white/85 transition active:scale-90">
+      <i data-lucide="x" class="h-4 w-4"></i>
+    </button>
+  </div>
+  <div class="overflow-y-auto px-5 pb-6">
+    <div id="epListMobile" class="grid gap-2 grid-cols-[repeat(auto-fill,minmax(50px,1fr))]"></div>
+  </div>
+</aside>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/watch.js') }}"></script>
+{% endblock %}

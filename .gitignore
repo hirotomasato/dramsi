@@ -1,0 +1,31 @@
+# Virtualenv
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# IDE
+.vscode/
+.idea/
+
+# Env
+.env
+.env.local
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Vercel
+.vercel

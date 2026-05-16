@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Jelajahi · DramSi{% endblock %}
+
+{% block content %}
+<div class="pt-2 pb-1">
+  <h1 class="text-2xl font-extrabold tracking-tight font-display" data-i18n="discover.title">Jelajahi</h1>
+  <p class="mt-1 text-sm text-white/55" data-i18n="discover.sub">Temukan drama dari semua platform.</p>
+</div>
+
+<nav id="platformTabs" aria-label="Pilih platform" class="no-scrollbar -mx-4 mt-4 flex gap-1 overflow-x-auto px-4"></nav>
+
+<div id="filterChips" class="mt-4 flex flex-wrap gap-2"></div>
+
+<section class="mt-3">
+  <div id="discoverGrid" class="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 md:gap-4 lg:grid-cols-6"></div>
+  <div class="mt-7 flex justify-center">
+    <button id="loadMoreBtn" hidden
+            class="inline-flex items-center gap-2 rounded-full border border-line bg-ink-700 px-5 py-2.5 text-sm font-semibold text-white/85 transition hover:border-primary/60 active:scale-95">
+      <i data-lucide="chevron-down" class="h-4 w-4"></i>
+      <span data-i18n="common.load_more">Muat Lebih Banyak</span>
+    </button>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/discover.js') }}"></script>
+{% endblock %}

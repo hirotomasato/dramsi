@@ -1,0 +1,35 @@
+<header id="topBar" class="sticky top-0 z-50 backdrop-blur-xl bg-ink-900/75 border-b border-line/60 pt-[env(safe-area-inset-top)]">
+  <div class="mx-auto flex h-14 max-w-[1280px] items-center gap-3 px-4">
+    <a href="/" class="flex items-center gap-2">
+      <span class="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-primary to-secondary text-base font-extrabold text-white shadow-glow">D</span>
+      <span class="hidden text-[17px] font-extrabold tracking-tight font-display sm:inline">DramSi</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-1 ml-3" aria-label="Desktop navigation">
+      <a href="/" data-route="/" class="rounded-full px-4 py-1.5 text-[13.5px] font-semibold text-white/60 hover:text-white transition">Beranda</a>
+      <a href="/discover" data-route="/discover" class="rounded-full px-4 py-1.5 text-[13.5px] font-semibold text-white/60 hover:text-white transition">Jelajahi</a>
+      <a href="/search" data-route="/search" class="rounded-full px-4 py-1.5 text-[13.5px] font-semibold text-white/60 hover:text-white transition">Cari</a>
+      <a href="/library" data-route="/library" class="rounded-full px-4 py-1.5 text-[13.5px] font-semibold text-white/60 hover:text-white transition">Saya</a>
+    </nav>
+
+    <div class="flex-1"></div>
+
+    <form id="searchInlineForm" autocomplete="off" action="/search"
+          class="group hidden md:flex h-9 min-w-[260px] items-center gap-2 rounded-full border border-line bg-ink-700 pl-4 pr-1 transition focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
+      <i data-lucide="search" class="h-4 w-4 text-white/45"></i>
+      <input type="search" name="q" placeholder="Cari drama, judul, kata kunci…"
+             class="flex-1 bg-transparent text-[13.5px] text-white placeholder:text-white/40 outline-none" />
+      <button type="submit" class="h-7 rounded-full bg-gradient-to-br from-primary to-secondary px-4 text-xs font-bold text-white shadow-glow transition active:scale-95">Cari</button>
+    </form>
+
+    <button id="langBtn" aria-label="Ganti bahasa"
+            class="flex h-9 items-center gap-1.5 rounded-full border border-line bg-ink-700 px-3 text-[12.5px] font-semibold text-white/85 transition hover:border-primary/60">
+      <i data-lucide="globe" class="h-3.5 w-3.5"></i>
+      <span id="langLabel">ID</span>
+    </button>
+
+    <a href="/search" aria-label="Cari" class="md:hidden grid h-9 w-9 place-items-center rounded-full bg-ink-700 text-white/85 transition active:scale-90">
+      <i data-lucide="search" class="h-4 w-4"></i>
+    </a>
+  </div>
+</header>
