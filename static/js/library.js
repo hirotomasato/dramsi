@@ -50,4 +50,25 @@
 
   syncChips();
   load();
+
+  // ── Pengaturan: Language switcher ───────────────────────────
+  const setLangBtn = document.getElementById('setLangBtn');
+  const setLangValue = document.getElementById('setLangValue');
+
+  function syncLangValue() {
+    if (!setLangValue) return;
+    const cur = D.LANGS.find((l) => l.code === D.getLang()) || D.LANGS[0];
+    setLangValue.textContent = cur.short;
+  }
+  syncLangValue();
+  document.addEventListener('lang:changed', syncLangValue);
+
+  setLangBtn?.addEventListener('click', () => {
+    D.openSheet({
+      title: D.t('sheet.lang'),
+      current: D.getLang(),
+      items: D.LANGS.map((l) => ({ value: l.code, label: l.label, sub: l.short })),
+      onPick: (code) => D.setLang(code),
+    });
+  });
 })();

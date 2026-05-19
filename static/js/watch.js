@@ -78,6 +78,32 @@
     document.body.classList.remove('is-watch', 'is-vertical', 'is-horizontal');
   });
 
+  // ── Smart back: kalau datang dari discover, "minimize" pakai history.back() ──
+  const cameFromDiscover = (() => {
+    if (params.get('from') === 'discover') return true;
+    try {
+      const ref = new URL(document.referrer || '');
+      if (ref.origin === window.location.origin && ref.pathname === '/discover') return true;
+    } catch (_) {}
+    return false;
+  })();
+  const backBtn = document.getElementById('backBtnMobile');
+  const backIcon = document.getElementById('backBtnIcon');
+  if (backBtn) {
+    if (cameFromDiscover) {
+      // Ubah icon ke minimize agar visualnya match konsep "kecilkan kembali"
+      if (backIcon) backIcon.setAttribute('data-lucide', 'minimize-2');
+      backBtn.setAttribute('aria-label', 'Kecilkan, kembali ke jelajah');
+    }
+    backBtn.addEventListener('click', () => {
+      if (cameFromDiscover && history.length > 1) {
+        history.back();
+      } else {
+        window.location.href = '/';
+      }
+    });
+  }
+
   // ── Helpers ────────────────────────────────────────────────────
   function showOverlay(text) {
     dom.overlay.classList.remove('hidden');
@@ -546,9 +572,24 @@
   let hideTimer = null;
   const IDLE_MS = 2500;
 
+  // Tap-catcher transparan: muncul di atas video saat overlay ter-hide
+  // supaya tap pertama dijamin diterima oleh kita (bukan diserap controls
+  // bawaan video). Ditempatkan di playerInner sebagai sibling video.
+  const tapCatcher = document.createElement('div');
+  tapCatcher.id = 'tapCatcher';
+  tapCatcher.className = 'md:hidden hidden absolute inset-0 z-[15]';
+  // Pakai inline style supaya nggak dependant pada Tailwind purge
+  tapCatcher.style.background = 'transparent';
+  dom.playerInner?.appendChild(tapCatcher);
+
   function setOverlayVisible(visible) {
     if (!mobileOverlay) return;
     mobileOverlay.classList.toggle('is-hidden', !visible);
+    // Saat overlay tersembunyi, aktifkan tap-catcher untuk menangkap tap
+    if (tapCatcher) {
+      if (visible) tapCatcher.classList.add('hidden');
+      else tapCatcher.classList.remove('hidden');
+    }
   }
   function showOverlayUI() {
     setOverlayVisible(true);
@@ -560,18 +601,32 @@
     hideTimer = setTimeout(() => setOverlayVisible(false), IDLE_MS);
   }
 
-  // Tap pada player → toggle overlay (kalau lagi tersembunyi → munculkan)
+  // Tap di tap-catcher → munculkan overlay (tap pertama)
+  tapCatcher.addEventListener('click', (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    showOverlayUI();
+  });
+  tapCatcher.addEventListener('touchend', (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    showOverlayUI();
+  });
+
+  // Tap pada player saat overlay TERLIHAT → sembunyikan (kalau lagi play)
   if (dom.playerInner) {
     dom.playerInner.addEventListener('click', (e) => {
-      // Abaikan klik yang berasal dari kontrol overlay sendiri (tombol/anchor)
+      // Klik berasal dari tap-catcher sudah di-handle di atas
+      if (e.target === tapCatcher) return;
+      // Abaikan klik tombol/anchor di overlay
       if (e.target.closest('button, a')) return;
-      // Abaikan klik di video controls bawaan (area bawah)
+      // Abaikan klik di video element (controls native akan menangani)
+      if (e.target === dom.video) return;
       const isHidden = mobileOverlay?.classList.contains('is-hidden');
       if (isHidden) {
         showOverlayUI();
-      } else {
-        // sembunyikan langsung kalau lagi play, biar feel-nya snappy
-        if (!dom.video.paused) setOverlayVisible(false);
+      } else if (!dom.video.paused) {
+        setOverlayVisible(false);
       }
     });
   }

@@ -186,3 +186,124 @@ video::-webkit-media-text-track-container {
 /* Auto-hide mobile overlay state */
 #mobileOverlay.is-hidden { opacity: 0; }
 #mobileOverlay.is-hidden * { pointer-events: none !important; }
+
+
+/* =====================================================================
+   Discover · TikTok-style vertical feed (mobile only)
+   - Setiap item mengambil seluruh viewport DI ATAS bottom nav
+   - scroll-snap-type: y mandatory → scroll satu drama per gesekan
+   - Hanya video yang sedang terlihat yang di-play
+   - Bottom nav TETAP terlihat agar user bisa navigasi ke halaman lain
+   ===================================================================== */
+
+/* Tinggi bottom nav (selaras dengan _bottom_nav.html: h-16 = 64px) */
+:root { --bn-h: calc(64px + env(safe-area-inset-bottom)); }
+
+@media (max-width: 767.98px) {
+  /* Hilangkan topbar di SEMUA halaman mobile — bottom nav cukup */
+  #topBar { display: none !important; }
+
+  /* Beri ruang status bar untuk konten utama */
+  body main { padding-top: calc(env(safe-area-inset-top) + 8px) !important; }
+
+  /* Saat di halaman watch (immersive), reset padding & sembunyikan juga bottom nav */
+  body.is-watch main { padding: 0 !important; }
+  body.is-watch #bottomNav { display: none !important; }
+
+  /* Saat di discover feed: TIDAK lagi sembunyikan bottom nav.
+     Cukup matikan padding-bottom global supaya feed bisa fullscreen-snap
+     di area sisa di atas nav. */
+  body.is-discover-feed { padding-bottom: 0 !important; }
+  body.is-discover-feed main {
+    padding: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
+}
+
+.discover-feed {
+  position: fixed;
+  inset: 0;
+  /* Sisakan ruang untuk bottom nav (mobile saja) */
+  bottom: var(--bn-h);
+  width: 100vw;
+  background: #000;
+  z-index: 30;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  /* Di desktop section ini gak dipakai, tapi reset jaga-jaga */
+  .discover-feed { display: none; }
+}
+
+.discover-feed-track {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+.discover-feed-track::-webkit-scrollbar { display: none; }
+
+.feed-item {
+  position: relative;
+  /* Tinggi = viewport - bottom nav */
+  height: calc(100dvh - var(--bn-h));
+  width: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  background: #000;
+  overflow: hidden;
+}
+
+.feed-item .feed-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+}
+.feed-item .feed-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.feed-item.is-vertical .feed-video { object-fit: cover; }
+.feed-item.is-horizontal .feed-video { object-fit: contain; }
+
+.feed-item .feed-bottom-grad {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 55%;
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,.5) 60%, rgba(0,0,0,.85));
+  pointer-events: none;
+}
+
+/* Loading state per item */
+.feed-item .feed-spinner {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+.feed-item.is-loading .feed-spinner { opacity: 1; }
+
+/* Mute pulse indicator */
+.feed-item .feed-tap-indicator {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s ease;
+}
+.feed-item.is-paused .feed-tap-indicator { opacity: 1; }

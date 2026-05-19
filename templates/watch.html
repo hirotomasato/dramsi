@@ -20,9 +20,10 @@
         <div id="mobileOverlay" class="md:hidden pointer-events-none absolute inset-0 z-20 transition-opacity duration-300">
           <!-- Top bar: back + meta + favorite -->
           <div class="pointer-events-auto absolute inset-x-0 top-0 flex items-start gap-2 px-3 pt-[calc(env(safe-area-inset-top)+10px)] pb-3 bg-gradient-to-b from-black/70 via-black/30 to-transparent">
-            <a href="/" aria-label="Kembali" class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-black/45 text-white backdrop-blur active:scale-90 transition">
-              <i data-lucide="chevron-left" class="h-5 w-5"></i>
-            </a>
+            <button id="backBtnMobile" type="button" aria-label="Kembali"
+                    class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-black/45 text-white backdrop-blur active:scale-90 transition">
+              <i id="backBtnIcon" data-lucide="chevron-left" class="h-5 w-5"></i>
+            </button>
             <div class="min-w-0 flex-1">
               <h1 id="dramaTitleMobile" class="truncate text-[15px] font-extrabold leading-tight font-display text-white drop-shadow">—</h1>
               <p class="mt-0.5 flex items-center gap-1.5 text-[11px] text-white/75 drop-shadow">
